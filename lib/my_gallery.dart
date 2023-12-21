@@ -33,8 +33,10 @@ class _MyGalleryScreenState extends State<MyGalleryScreen> {
       ),
       body: _imageFileList == null
           ? const Center(child: Text('불러온 데이터가 없습니다'))
-          : FutureBuilder(
-              future: _imageFileList![0].readAsBytes(),
+          : PageView(
+        children: _imageFileList!.map((image) {
+          return FutureBuilder(
+              future: image.readAsBytes(),
               builder: (context, snapshot) {
                 final data = snapshot.data;
                 if (data == null || snapshot.connectionState == ConnectionState.waiting) {
@@ -44,7 +46,10 @@ class _MyGalleryScreenState extends State<MyGalleryScreen> {
                   data,
                   width: double.infinity,
                 );
-              }),
+              }
+          );
+        }).toList(),
+      ),
     );
   }
 }
