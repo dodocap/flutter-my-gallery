@@ -29,8 +29,22 @@ class _MyGalleryScreenState extends State<MyGalleryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text('전자액자')
+        title: const Text('전자액자'),
       ),
+      body: _imageFileList == null
+          ? const Center(child: Text('불러온 데이터가 없습니다'))
+          : FutureBuilder(
+              future: _imageFileList![0].readAsBytes(),
+              builder: (context, snapshot) {
+                final data = snapshot.data;
+                if (data == null || snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                return Image.memory(
+                  data,
+                  width: double.infinity,
+                );
+              }),
     );
   }
 }
